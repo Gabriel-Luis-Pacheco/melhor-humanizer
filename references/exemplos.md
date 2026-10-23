@@ -4,11 +4,11 @@ Exemplos ilustrativos de edição de linguagem. Números e situações dos exemp
 
 ## 1. Texto empresarial inflado
 
-**Antes:** “É com imensa satisfação que anunciamos um marco revolucionário em nossa jornada de inovação. Nossa solução robusta e intuitiva eleva a produtividade a um novo patamar.”
+**Antes:** “É com imensa satisfação que anunciamos um marco revolucionário. A nova versão permite baixar os relatórios em CSV a partir de hoje.”
 
-**Depois:** “A nova versão já está disponível. Agora é possível exportar os relatórios sem copiar os dados manualmente.”
+**Depois:** “A partir de hoje, a nova versão permite baixar relatórios em CSV.”
 
-**Por quê:** o exemplo reescreve uma peça fictícia com uma funcionalidade definida para mostrar a diferença. Em texto real, só use “exportar relatórios” quando a funcionalidade vier da fonte.
+**Por quê:** mantém a funcionalidade e a data relativa já informadas, sem acrescentar promessas.
 
 ## 2. Relatório com informação concreta
 
@@ -28,19 +28,19 @@ Exemplos ilustrativos de edição de linguagem. Números e situações dos exemp
 
 ## 4. Contraste artificial
 
-**Antes:** “A questão não é apenas realizar a tarefa. É transformar a forma como enxergamos o próprio aprendizado.”
+**Antes:** “A questão não é apenas realizar a tarefa. É compreender como o roteador distribui o sinal nas duas salas.”
 
-**Depois:** “A atividade serve para praticar o conteúdo visto em aula.”
+**Depois:** “A tarefa ajuda a entender como o roteador distribui o sinal nas duas salas.”
 
-**Por quê:** demonstra edição de uma ideia ilustrativa. Em documentos reais, não acrescente finalidade não informada.
+**Por quê:** corta a preparação retórica e conserva a finalidade presente no original.
 
 ## 5. Roteiro com frases performáticas
 
-**Antes:** “Uma ideia. Um sonho. Um futuro. E a mudança começa agora.”
+**Antes:** “Uma ideia. Um sonho. Um futuro. Começamos em casa, com uma versão simples do app, e ainda estamos ajustando o resultado.”
 
-**Depois:** “A gente começou pequeno e ainda tem muita coisa para resolver.”
+**Depois:** “A gente começou em casa, com uma versão simples do app. Ainda estamos fazendo ajustes.”
 
-**Por quê:** menos teatral, com perspectiva humana. Preserve o otimismo do autor se ele realmente estiver no original.
+**Por quê:** remove o efeito dramático sem inventar origem, andamento ou sentimentos.
 
 ## 6. Termo técnico não precisa de sinônimo
 
