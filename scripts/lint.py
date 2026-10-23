@@ -23,7 +23,7 @@ class Finding:
 # An intentionally selective bank; patterns are clues requiring human judgment.
 RULES = {
     "pt": [
-        ("chatbot_open", "alta", r"(?i)\b(?:claro[!,.:]|excelente pergunta|vamos (?:mergulhar|explorar|desvendar)|aqui est[aá] (?:o|a|um|uma))\b", "Remova a abertura e vá ao assunto, se ela não cumprir uma função."),
+        ("chatbot_open", "alta", r"(?i)(?<!\w)(?:claro\s*[!,:]|excelente pergunta|vamos (?:mergulhar|explorar|desvendar)|aqui est[aá] (?:o|a|um|uma)\b)", "Remova a abertura e vá ao assunto, se ela não cumprir uma função."),
         ("empty_preamble", "media", r"(?i)\b(?:[eé] importante (?:ressaltar|destacar|salientar)|vale (?:destacar|ressaltar)|cabe salientar|em um mundo cada vez mais)\b", "Diga a informação diretamente."),
         ("fake_reversal", "alta", r"(?i)\b(?:n[aã]o (?:[eé]|se trata) (?:apenas|s[oó]|somente))\b.{0,100}\b(?:mas|e sim)\b", "Verifique se o contraste é necessário; caso contrário, afirme o ponto."),
         ("sales_fluff", "media", r"(?i)\b(?:jornada transformadora|desbloque(?:ar|ie) (?:todo )?o potencial|novo patamar|revolu[cç][aã]o|experi[eê]ncia [uú]nica|solu[cç][aã]o robusta)\b", "Troque promessa genérica por fato demonstrado ou retire."),
@@ -44,6 +44,7 @@ RULES = {
 }
 
 FENCE = chr(96) * 3
+FENCE_RE = re.compile(r"^ {0,3}(" + chr(96) + r"{3,}|~{3,})(.*)$")
 INLINE = chr(96)
 URL = re.compile(r"https?://[^\s)]+", re.I)
 MD_LINK = re.compile(r"\[[^]\n]+\]\([^)]+\)")
@@ -70,8 +71,12 @@ def mask_inline(line: str) -> str:
 def lint_text(text: str, lang: str = "auto") -> list[Finding]:
     if lang == "auto":
         lang = language_of(text)
+    if lang not in RULES:
+        raise ValueError("Idioma inválido; escolha pt, en ou auto.")
     found: list[Finding] = []
     fenced = False
+    fence_char = ""
+    fence_size = 0
     frontmatter = False
     for number, raw in enumerate(text.splitlines(), 1):
         trimmed = raw.strip()
@@ -82,10 +87,15 @@ def lint_text(text: str, lang: str = "auto") -> list[Finding]:
             if trimmed == "---":
                 frontmatter = False
             continue
-        if trimmed.startswith((FENCE, "~~~")):
-            fenced = not fenced
+        fence = FENCE_RE.match(raw)
+        if fence:
+            candidate, tail = fence.groups()
+            if not fenced:
+                fenced, fence_char, fence_size = True, candidate[0], len(candidate)
+            elif candidate[0] == fence_char and len(candidate) >= fence_size and not tail.strip():
+                fenced = False
             continue
-        if fenced or not trimmed or trimmed.startswith((">", "#", "|", "//")):
+        if fenced or not trimmed or trimmed.startswith((">", "#", "|", "//", "<!--")):
             continue
         masked = mask_inline(raw)
         for rule, severity, pattern, advice in RULES[lang]:
@@ -113,7 +123,7 @@ def main(argv: list[str] | None = None) -> int:
         p.error(str(exc))
     findings = lint_text(content, lang=args.lang)
     if args.json:
-        print(json.dumps({"findings": [asdict(f) for f in findings],
+        print(json.dumps({"language": args.lang if args.lang != "auto" else language_of(content), "findings": [asdict(f) for f in findings],
                           "warning": "Heurística editorial: não determina autoria."},
                          ensure_ascii=False, indent=2))
     elif not findings:
